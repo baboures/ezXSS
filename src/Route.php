@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
 class Route
 {
 
@@ -335,15 +339,50 @@ class Route
                         $this->basic->htmlBlocks('mail')
                     );
 
-                    $headers[] = 'From: ' . $setting['emailfrom'];
-                    $headers[] = 'MIME-Version: 1.0';
-                    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                    /*******************************************/
+
+                    $mail = new PHPMailer();
+
+                    $mail->isSMTP();
+
+                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
+                    $mail->Host = 'smtp.gmail.com';
+
+                    $mail->Port = 587;
+
+                    $mail->SMTPSecure = "tls";
+
+                    $mail->SMTPAuth = true;
+
+                    $mail->Username = $setting['emailfrom'];
+
+                    $mail->Password = 'yourpassword';
+
+                    $mail->setFrom($setting['emailfrom'], 'ezXSS');
+
+                    $mail->addAddress($setting['email']);
+
+                    $mail->Subject = '[ezXSS] XSS on ' . htmlspecialchars($json->uri);
+
+                    $mail->Body = $htmlTemplate;
+
+                    $mail->isHTML(true); 
+
+                    if (!$mail->send()) {
+                        echo 'Mailer Error: ' . $mail->ErrorInfo;
+                    }
+
+                    /*******************************************/
+
+                    /*
                     mail(
                         $setting['email'],
                         '[ezXSS] XSS on ' . htmlspecialchars($json->uri),
                         $htmlTemplate,
                         implode("\r\n", $headers)
                     );
+                    */
                 }
             }
         }
