@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
 class User
 {
 
@@ -541,15 +545,51 @@ class User
 
             $emailfrom = $this->database->fetchSetting('emailform');
 
-            $headers[] = 'From: ' . $emailfrom;
-            $headers[] = 'MIME-Version: 1.0';
-            $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+            /*******************************************/
+
+            $mail = new PHPMailer();
+
+            $mail->isSMTP();
+
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
+            $mail->Host = 'smtp.gmail.com';
+
+            $mail->Port = 587;
+
+            $mail->SMTPSecure = "tls";
+
+            $mail->SMTPAuth = true;
+
+            $mail->Username = $emailfrom;
+
+            $mail->Password = 'yourpassword';
+
+            $mail->setFrom($emailfrom, 'ezXSS');
+
+            $mail->addAddress($email);
+
+            $mail->Subject = '[ezXSS] XSS on ' . htmlspecialchars($report['uri']);
+
+            $mail->Body = $htmlTemplate;
+
+            $mail->isHTML(true); 
+
+            if (!$mail->send()) {
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+            }
+
+            /*******************************************/
+
+            /*
             mail(
                 $email,
                 '[ezXSS] Shared XSS on ' . htmlspecialchars($report['uri']),
                 $htmlTemplate,
                 implode("\r\n", $headers)
             );
+            */
 
             return 'Report is successfully shared via email!';
         }
