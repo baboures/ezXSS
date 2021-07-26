@@ -552,7 +552,7 @@ class User
 
             $mail->isSMTP();
 
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->SMTPDebug = 0;
 
             $mail->Host = 'smtp.gmail.com';
 
