@@ -543,7 +543,7 @@ class User
                 $this->basic->htmlBlocks('mail')
             );
 
-            $emailfrom = $this->database->fetchSetting('emailform');
+            $emailfrom = $this->database->fetchSetting('emailfrom');
 
 
             /*******************************************/
